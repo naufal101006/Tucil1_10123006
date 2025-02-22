@@ -2,8 +2,8 @@ package main.Board;
 
 import main.Block;
 
-public class RectBoard extends Board {
-    public RectBoard(int y, int x) {
+public class CustomBoard extends Board {
+    public CustomBoard(int y, int x) {
         this.board = new Character[y][x];
 
         for (int i = 0; i < this.board.length; i++) {
@@ -13,8 +13,23 @@ public class RectBoard extends Board {
         }
     }
 
-    public RectBoard clone() {
-        RectBoard clone = new RectBoard(this.board.length, this.board[0].length);
+    public CustomBoard(int y, int x, String layout) {
+        this.board = new Character[y][x];
+        String[] parts = layout.split("\\r?\\n");
+
+        for (int i = 0; i < this.board.length; i++) {
+            for (int j = 0; j < this.board[i].length; j++) {
+                if (parts[i].charAt(j) == '.') {
+                    this.board[i][j] = ' ';
+                } else if (parts[i].charAt(j) == 'X') {
+                    this.board[i][j] = '.';
+                }
+            }
+        }
+    }
+
+    public CustomBoard clone() {
+        CustomBoard clone = new CustomBoard(this.board.length, this.board[0].length);
 
         for (int i = 0; i < this.board.length; i++) {
             for (int j = 0; j < this.board[i].length; j++) {
@@ -47,29 +62,5 @@ public class RectBoard extends Board {
         }
 
         return canPlace;
-    }
-
-    public boolean isEmpty(int y, int x) {
-        if (y < this.board.length && x < this.board[0].length) {
-            return this.board[y][x] == '.';
-        }
-        return false;
-    }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < this.board.length; i++) {
-
-            for (int j = 0; j < this.board[i].length; j++) {
-                sb.append(this.board[i][j]);
-            }
-            
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
-
-    public void print() {
-        System.out.println(toString());
     }
 }

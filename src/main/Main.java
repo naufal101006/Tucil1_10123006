@@ -16,17 +16,20 @@ public class Main {
 
         for (int i = 0; i < b.board.length; i++) {
             for (int j = 0; j < b.board[0].length; j++) {
-                if (b.isEmpty(i, j)) {
-                    for (int r = 0; r < 4; r++) {
-                        Board clone = b.clone();
-                        boolean canPlace = clone.place(blocks[depth].rotate(r), i, j);
+                if (!b.isOccupied(i, j)) {
+                    for (int f = 0; f < 2; f++) {
+                        for (int r = 0; r < 4; r++) {
+                            Board clone = b.clone();
+                            boolean canPlace = clone.place(blocks[depth].flip(f).rotate(r), i, j);
 
-                        if (canPlace) {
-                            boards.add(clone);
-                            Board next = solveRec(boards, blocks, depth+1);
+                            if (canPlace) {
+                                boards.add(clone);
 
-                            if (next != null) {
-                                return next;
+                                Board next = solveRec(boards, blocks, depth+1);
+    
+                                if (next != null) {
+                                    return next;
+                                }
                             }
                         }
                     }
@@ -52,7 +55,7 @@ public class Main {
         Board board = new RectBoard(0, 0);
         ArrayList<Block> blocks = new ArrayList<Block>();
 
-        try(BufferedReader br = new BufferedReader(new FileReader("../test/test1.txt"))) {
+        try(BufferedReader br = new BufferedReader(new FileReader("../test/test2.txt"))) {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
             int lineIdx = 0;
@@ -61,6 +64,7 @@ public class Main {
             int y = -1;
             int blockLen = -1;
             char currentChar = '\u0000';
+            String boardType = "";
 
             while (line != null) {
                 // Size
@@ -70,35 +74,49 @@ public class Main {
                         throw new IOException("Wrong arguments, check first line.");
                     }
 
-                    x = Integer.parseInt(parts[0]);
-                    y = Integer.parseInt(parts[1]);
+                    y = Integer.parseInt(parts[0]);
+                    x = Integer.parseInt(parts[1]);
                     blockLen = Integer.parseInt(parts[2]);
                 // Constructor
                 } else if (lineIdx == 1) {
                     switch (line) {
                         case "DEFAULT":
+                            boardType = "Default";
                             board = new RectBoard(y, x);
                             // board.print();
                             break;
+                        case "CUSTOM":
+                            boardType = "Custom";
+                            break;
                         default:
-                            throw new IOException("Wrong arguments, check first line.");
+                            throw new IOException("Wrong board type, check second line.");
                     }
                 // Block reading
                 } else {
-                    if (sb.length() == 0 && blocks.size() == 0) {
-                        currentChar = line.charAt(0);
+                    if (boardType == "Custom" && lineIdx < 2+y) {
+                        sb.append(line);
+                        sb.append('\n');
+                    } else {
+                        if (boardType == "Custom" && lineIdx == 2+y) {
+                            board = new CustomBoard(y, x, sb.toString());
+                            sb.setLength(0);
+                        }
+
+                        if (sb.length() == 0 && blocks.size() == 0) {
+                            currentChar = line.trim().charAt(0);
+                        }
+    
+                        if (currentChar != line.trim().charAt(0)) {
+                            Block newBlock = new Block(sb.toString());
+                            blocks.add(newBlock);
+    
+                            sb.setLength(0);
+                            currentChar = line.trim().charAt(0);
+                        }
+    
+                        sb.append(line);
+                        sb.append('\n');
                     }
-
-                    if (currentChar != line.charAt(0)) {
-                        Block newBlock = new Block(sb.toString());
-                        blocks.add(newBlock);
-
-                        sb.setLength(0);
-                        currentChar = line.charAt(0);
-                    }
-
-                    sb.append(line);
-                    sb.append('\n');
                 }
 
                 line = br.readLine();
@@ -109,11 +127,12 @@ public class Main {
             sb = null;
 
             if (blocks.size() != blockLen) {
-                throw new IOException("Wrong arguments, check first line.");
+                throw new IOException("Wrong block length, check first line.");
             }
 
             Block[] blockArr = new Block[blockLen];
             blockArr = blocks.toArray(blockArr);
+
             solve(board, blockArr);
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");

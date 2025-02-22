@@ -17,7 +17,7 @@ public class Block {
 
         for (int i = 0; i < this.block.length; i++) {
             for (int j = 0; j < this.block[i].length; j++) {
-                this.block[i][j] = parts[i].length() > j ? parts[i].charAt(j) : '.';
+                this.block[i][j] = parts[i].length() > j ? (parts[i].charAt(j) != ' ' ? parts[i].charAt(j) : '.') : '.';
             }
         }
     }
@@ -60,6 +60,24 @@ public class Block {
             case 3:
                 for (int j = 0; j < this.block[0].length; j++) {
                     for (int i = this.block.length-1; i >= 0; i--) {
+                        sb.append(this.block[i][j]);
+                    }
+                    sb.append('\n');
+                }
+                break;
+        }
+        return new Block(sb.toString());
+    }
+
+    public Block flip(int f) {
+        StringBuilder sb = new StringBuilder();
+        
+        switch(f) {
+            case 0:
+                return this;
+            case 1:
+                for (int i = 0; i < this.block.length; i++) {
+                    for (int j = this.block[0].length-1; j >= 0; j--) {
                         sb.append(this.block[i][j]);
                     }
                     sb.append('\n');
