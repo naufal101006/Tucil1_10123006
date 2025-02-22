@@ -55,7 +55,7 @@ public class Main {
         Board board = new RectBoard(0, 0);
         ArrayList<Block> blocks = new ArrayList<Block>();
 
-        try(BufferedReader br = new BufferedReader(new FileReader("../test/test2.txt"))) {
+        try(BufferedReader br = new BufferedReader(new FileReader(args[0]))) {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
             int lineIdx = 0;
