@@ -1,5 +1,9 @@
+package main;
+
+import main.utils.Function3;
+
 public class Block {
-    Character[][] block;
+    public Character[][] block;
 
     public Block(String s) {
         String[] parts = s.split("\\r?\\n");
@@ -16,6 +20,19 @@ public class Block {
                 this.block[i][j] = parts[i].length() > j ? parts[i].charAt(j) : '.';
             }
         }
+    }
+
+    public void iterate(Function3<Character, Integer, Integer> f) {
+        for (int i = 0; i < this.block.length; i++) {
+            for (int j = 0; j < this.block[i].length; j++) {
+                f.apply(this.block[i][j], i, j);
+            }
+        }
+    }
+
+    public int[] size() {
+        int[] L = {this.block.length, this.block[0].length};
+        return L;
     }
 
     public void print() {

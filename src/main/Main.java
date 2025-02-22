@@ -1,13 +1,15 @@
+package main;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import Board.*;
+
+import main.Board.*;
 
 public class Main {
     public static void main(String[] args) {
-        Board board;
+        Board board = new RectBoard(0, 0);
         ArrayList<Block> blocks = new ArrayList<Block>();
 
         try(BufferedReader br = new BufferedReader(new FileReader("../test/test1.txt"))) {
@@ -36,7 +38,7 @@ public class Main {
                     switch (line) {
                         case "DEFAULT":
                             board = new RectBoard(y, x);
-                            board.print();
+                            // board.print();
                             break;
                         default:
                             throw new IOException("Wrong arguments, check first line.");
@@ -66,7 +68,10 @@ public class Main {
             blocks.add(newBlock);
             sb = null;
 
-            blocks.forEach((b) -> b.print());
+            // blocks.forEach((b) -> b.print());
+            board.place(blocks.get(0), 0, 0);
+            board.place(blocks.get(6), 0, 1);
+            board.print();
             if (blocks.size() != blockLen) {
                 throw new IOException("Wrong arguments, check first line.");
             }
