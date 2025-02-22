@@ -13,6 +13,18 @@ public class RectBoard extends Board {
         }
     }
 
+    public RectBoard clone() {
+        RectBoard clone = new RectBoard(this.board.length, this.board[0].length);
+
+        for (int i = 0; i < this.board.length; i++) {
+            for (int j = 0; j < this.board[i].length; j++) {
+                clone.board[i][j] = this.board[i][j];
+            }
+        }
+
+        return clone;
+    }
+
     public boolean place(Block b, int y, int x) {
         boolean canPlace = true;
         int[] blockSize = b.size();
@@ -28,7 +40,9 @@ public class RectBoard extends Board {
 
         if (canPlace) {
             b.iterate((c, i, j) -> {
-                this.board[y+i][x+j] = c;
+                if (c != '.') {
+                    this.board[y+i][x+j] = c;
+                }
             });
         }
 

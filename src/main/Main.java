@@ -8,6 +8,46 @@ import java.util.ArrayList;
 import main.Board.*;
 
 public class Main {
+    private static Board solveRec(ArrayList<Board> boards, Block[] blocks, int depth) {
+        Board b =  boards.get(boards.size()-1);
+        if (depth >= blocks.length) {
+            return b;
+        }
+
+        for (int i = 0; i < b.board.length; i++) {
+            for (int j = 0; j < b.board[0].length; j++) {
+                if (b.isEmpty(i, j)) {
+                    for (int r = 0; r < 4; r++) {
+                        Board clone = b.clone();
+                        boolean canPlace = clone.place(blocks[depth].rotate(r), i, j);
+
+                        if (canPlace) {
+                            boards.add(clone);
+                            Board next = solveRec(boards, blocks, depth+1);
+
+                            if (next != null) {
+                                return next;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        boards.remove(boards.size()-1);
+        return null;
+    }
+
+    private static void solve(Board board, Block[] blocks) {
+        ArrayList<Board> list = new ArrayList<Board>();
+        list.add(board);
+
+        Board result = solveRec(list, blocks, 0);
+        if (result != null) {
+            result.print();
+        }
+    }
+
     public static void main(String[] args) {
         Board board = new RectBoard(0, 0);
         ArrayList<Block> blocks = new ArrayList<Block>();
@@ -68,13 +108,13 @@ public class Main {
             blocks.add(newBlock);
             sb = null;
 
-            // blocks.forEach((b) -> b.print());
-            board.place(blocks.get(0), 0, 0);
-            board.place(blocks.get(6), 0, 1);
-            board.print();
             if (blocks.size() != blockLen) {
                 throw new IOException("Wrong arguments, check first line.");
             }
+
+            Block[] blockArr = new Block[blockLen];
+            blockArr = blocks.toArray(blockArr);
+            solve(board, blockArr);
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
             System.out.println(e);

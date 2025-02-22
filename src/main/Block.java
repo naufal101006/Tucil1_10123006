@@ -35,6 +35,40 @@ public class Block {
         return L;
     }
 
+    public Block rotate(int r) {
+        StringBuilder sb = new StringBuilder();
+        
+        switch(r) {
+            case 0:
+                return this;
+            case 1:
+                for (int j = this.block[0].length-1; j >= 0; j--) {
+                    for (int i = 0; i < this.block.length; i++) {
+                        sb.append(this.block[i][j]);
+                    }
+                    sb.append('\n');
+                }
+                break;
+            case 2:
+                for (int i = this.block.length-1; i >= 0; i--) {
+                    for (int j = this.block[0].length-1; j >= 0; j--) {
+                        sb.append(this.block[i][j]);
+                    }
+                    sb.append('\n');
+                }
+                break;
+            case 3:
+                for (int j = 0; j < this.block[0].length; j++) {
+                    for (int i = this.block.length-1; i >= 0; i--) {
+                        sb.append(this.block[i][j]);
+                    }
+                    sb.append('\n');
+                }
+                break;
+        }
+        return new Block(sb.toString());
+    }
+
     public void print() {
         for (int i = 0; i < this.block.length; i++) {
             StringBuilder sb = new StringBuilder();
