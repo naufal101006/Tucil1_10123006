@@ -1,5 +1,7 @@
 package main.Board;
 
+import java.io.IOException;
+
 import main.Block;
 
 public class CustomBoard extends Board {
@@ -13,9 +15,13 @@ public class CustomBoard extends Board {
         }
     }
 
-    public CustomBoard(int y, int x, String layout) {
+    public CustomBoard(int y, int x, String layout) throws IOException {
         this.board = new Character[y][x];
         String[] parts = layout.split("\\r?\\n");
+
+        if (parts.length != y || parts[0].length() != x) {
+            throw new IOException("Wrong board size, check first line.");
+        }
 
         for (int i = 0; i < this.board.length; i++) {
             for (int j = 0; j < this.board[i].length; j++) {
