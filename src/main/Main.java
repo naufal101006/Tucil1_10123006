@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import main.Board.*;
 
 public class Main {
+    private static int iters = 0;
+
     private static Board solveRec(ArrayList<Board> boards, Block[] blocks, int depth) {
         Board b =  boards.get(boards.size()-1);
         if (depth >= blocks.length) {
@@ -23,6 +25,7 @@ public class Main {
                             boolean canPlace = clone.place(blocks[depth].flip(f).rotate(r), i, j);
 
                             if (canPlace) {
+                                iters++;
                                 boards.add(clone);
 
                                 Board next = solveRec(boards, blocks, depth+1);
@@ -41,14 +44,12 @@ public class Main {
         return null;
     }
 
-    private static void solve(Board board, Block[] blocks) {
+    private static Board solve(Board board, Block[] blocks) {
         ArrayList<Board> list = new ArrayList<Board>();
         list.add(board);
 
         Board result = solveRec(list, blocks, 0);
-        if (result != null) {
-            result.print();
-        }
+        return result;
     }
 
     public static void main(String[] args) {
@@ -133,13 +134,22 @@ public class Main {
             Block[] blockArr = new Block[blockLen];
             blockArr = blocks.toArray(blockArr);
 
-            solve(board, blockArr);
+            long start = System.currentTimeMillis();
+            Board solution = solve(board, blockArr);
+            long end = System.currentTimeMillis();
+
+            solution.print();
+            System.out.println("Took " + (end-start) + "ms");
+            System.out.println("Iterations: " + iters);
+
+            solution.toFile(args[0].replaceAll("(\\w+)\\.txt$", "$1-result.txt"));
+            solution.toImage(args[0].replaceAll("(\\w+)\\.txt$", "$1-result.png"));
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
-            System.out.println(e);
+            System.err.println(e);
         } catch (IOException e) {
             System.out.println("Failed to read!");
-            System.out.println(e);
+            System.err.println(e);
         }
     }
 }

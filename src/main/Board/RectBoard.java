@@ -55,21 +55,4 @@ public class RectBoard extends Board {
         }
         return false;
     }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < this.board.length; i++) {
-
-            for (int j = 0; j < this.board[i].length; j++) {
-                sb.append(this.board[i][j]);
-            }
-            
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
-
-    public void print() {
-        System.out.println(toString());
-    }
 }
