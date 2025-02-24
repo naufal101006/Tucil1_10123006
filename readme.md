@@ -9,7 +9,7 @@ Program untuk menyelesaikan permainan IQ Puzzler Pro dengan algoritma _brute for
 
 ### Compilation and Execution:
 
-1.  Run `compile.bat`
+1.  Run `compile.bat` or `compile.sh`
 2.  Run the command `java -jar .\bin\main.jar <path to test file>`
 
 
