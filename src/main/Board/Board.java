@@ -14,6 +14,7 @@ import main.Block;
 
 public abstract class Board {
     public Character[][] board;
+    public int area = 0;
     private static final Map<Character, String> consoleColorMap = new HashMap<>();
     private static final Map<Character, Integer> imageColorMap = new HashMap<>();
     static {

@@ -29,6 +29,7 @@ public class CustomBoard extends Board {
                     this.board[i][j] = ' ';
                 } else if (parts[i].charAt(j) == 'X') {
                     this.board[i][j] = '.';
+                    this.area++;
                 }
             }
         }
@@ -36,6 +37,7 @@ public class CustomBoard extends Board {
 
     public CustomBoard clone() {
         CustomBoard clone = new CustomBoard(this.board.length, this.board[0].length);
+        clone.area = this.area;
 
         for (int i = 0; i < this.board.length; i++) {
             for (int j = 0; j < this.board[i].length; j++) {

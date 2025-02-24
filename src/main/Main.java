@@ -64,6 +64,7 @@ public class Main {
             int x = -1;
             int y = -1;
             int blockLen = -1;
+            int blockArea = 0;
             char currentChar = '\u0000';
             String boardType = "";
 
@@ -110,6 +111,7 @@ public class Main {
                         if (currentChar != line.trim().charAt(0)) {
                             Block newBlock = new Block(sb.toString());
                             blocks.add(newBlock);
+                            blockArea += newBlock.area;
     
                             sb.setLength(0);
                             currentChar = line.trim().charAt(0);
@@ -125,10 +127,15 @@ public class Main {
             }
             Block newBlock = new Block(sb.toString());
             blocks.add(newBlock);
+            blockArea += newBlock.area;
             sb = null;
 
             if (blocks.size() != blockLen) {
                 throw new IOException("Wrong block length, check first line.");
+            }
+
+            if (board.area != blockArea) {
+                throw new IOException("Block area and board area mismatch.");
             }
 
             Block[] blockArr = new Block[blockLen];
@@ -138,12 +145,16 @@ public class Main {
             Board solution = solve(board, blockArr);
             long end = System.currentTimeMillis();
 
-            solution.print();
-            System.out.println("Took " + (end-start) + "ms");
-            System.out.println("Iterations: " + iters);
-
-            solution.toFile(args[0].replaceAll("(\\w+)\\.txt$", "$1-result.txt"));
-            solution.toImage(args[0].replaceAll("(\\w+)\\.txt$", "$1-result.png"));
+            if (solution != null) {
+                solution.print();
+                System.out.println("Took " + (end-start) + "ms");
+                System.out.println("Iterations: " + iters);
+    
+                solution.toFile(args[0].replaceAll("(\\w+)\\.txt$", "$1-result.txt"));
+                solution.toImage(args[0].replaceAll("(\\w+)\\.txt$", "$1-result.png"));
+            } else {
+                System.out.println("No solution");
+            }
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
             System.err.println(e);

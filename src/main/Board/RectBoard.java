@@ -5,7 +5,7 @@ import main.Block;
 public class RectBoard extends Board {
     public RectBoard(int y, int x) {
         this.board = new Character[y][x];
-
+        this.area = x*y;
         for (int i = 0; i < this.board.length; i++) {
             for (int j = 0; j < this.board[i].length; j++) {
                 this.board[i][j] = '.';

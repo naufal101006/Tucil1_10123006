@@ -4,6 +4,7 @@ import main.utils.Function3;
 
 public class Block {
     public Character[][] block;
+    public int area;
 
     public Block(String s) {
         String[] parts = s.split("\\r?\\n");
@@ -18,6 +19,9 @@ public class Block {
         for (int i = 0; i < this.block.length; i++) {
             for (int j = 0; j < this.block[i].length; j++) {
                 this.block[i][j] = parts[i].length() > j ? (parts[i].charAt(j) != ' ' ? parts[i].charAt(j) : '.') : '.';
+                if (Character.isAlphabetic(this.block[i][j])) {
+                    this.area++;
+                }
             }
         }
     }
